@@ -1,6 +1,6 @@
 **Collaboration:**
   ```
-  git clone <repo-url>
+  git clone https://github.com/ProgrammingStuff11/MySPIM.git
   ```
 
 **Get Latest Changes**
