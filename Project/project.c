@@ -156,13 +156,42 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
 
 /* Read / Write Memory */
 /* 10 Points */
-int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
+int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem)
 {
+    // 4. Return 1 if a halt condition occurs; otherwise, return 0.
+    // Have to check halt conditions first to avoid segmentation fault
+    /*
+        Halt causes: 
+        - An illegal instruction is encountered.
+        - Jumping to an address that is not word-aligned (being multiple of 4).
+        - The address of lw or sw is not word-aligned.
+        - Accessing data or jumping to an address that is beyond the memory.
+    */
+    if (MemRead == 1 || MemWrite == 1) 
+    {
+        if (ALUresult % 4 != 0 || ALUresult > 0xFFFF) // check to see if out of 64kB memory range
+        {
+            return 1;
+        }
+    }
+    
     // 1. Use the value of MemWrite or MemRead to determine if a memory write
     // operation or memory read operation or neither is occurring.
+
     // 2. If reading from memory, read the content of the memory location addressed by ALUresult to memdata.
+    if (MemRead == 1) 
+    {
+        // MEM bit shift to convert byte address to word index
+        *memdata = Mem[ALUresult >> 2];
+    }
+
     // 3. If writing to memory, write the value of data2 to the memory location addressed by ALUresult.
-    // 4. Return 1 if a halt condition occurs; otherwise, return 0.
+    if (MemWrite == 1) 
+    {
+        Mem[ALUresult >> 2] = data2;
+    }
+
+    return 0;
 }
 
 
@@ -192,8 +221,26 @@ void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,
 
 /* PC update */
 /* 10 Points */
-void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char Zero,unsigned *PC)
+void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
 {
     // 1. Update the program counter (PC).
+    // if you cannot branch or jump, update regularly
+    unsigned pc_Counter = *PC + 4;
+
+    // 1 means enabled
+    // 0 means disabled
+    if (Branch == 1 && Zero == 1) // Is this a branch instruction AND did ALU give us the green light?
+    {
+        // Shift left by 2, convert word offset to byte offset 
+        pc_Counter += (extended_value << 2);
+    }
+    if (Jump == 1) // Is this a jump instruction 
+    {
+        // jsec is 26-bit 
+        // Shift left by 2, get 28 bits
+        pc_Counter = (pc_Counter & 0xF0000000) | (jsec << 2);
+    }
+
+    *PC = pc_Counter;
 }
 
