@@ -246,14 +246,63 @@ void sign_extend(unsigned offset,unsigned *extended_value)
 /* ALU operations */
 /* 10 Points */
 int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
-{
+{  
+    // 5. Return 1 if a halt condition occurs; otherwise, return 0.
+    if(ALUOp > 7) {
+        return 1;
+    }
+
     // 1. Apply ALU operations on data1, and data2 or extended_value (determined by ALUSrc).
+    unsigned num;
+    // use sign extended value if ALUSrc is 1
+    if(ALUSrc == 1) {
+        num = extended_value;
+    } 
+    // else use data2 if ALUSrc is 0
+    else {
+        num = data2;
+    }
     // 2. The operation performed is based on ALUOp and funct.
+    if(ALUOp == 7) {
+        // add
+        if(funct == 0x20) {
+            ALUOp = 0;
+        } 
+        // sub
+        else if(funct == 0x22) {
+            ALUOp = 1;
+        }
+        // slt
+        else if(funct == 0x2A) {
+            ALUOp = 2;
+        }
+        // sltu
+        else if(funct == 0x2B) {
+            ALUOp = 3;
+        }
+        // and
+        else if(funct == 0x24) {
+            ALUOp = 4;
+        }
+        // or
+        else if(funct == 0x25) {
+            ALUOp = 5;
+        }
+        // sll
+        else if(funct == 0x00) {
+            ALUOp = 6;
+        }
+        // nor
+        else if(funct == 0x27) {
+            ALUOp = 7;
+        }
+    }
+
     // 3. Apply the function ALU(...).
     // 4. Output the result to ALUresult.
-    // 5. Return 1 if a halt condition occurs; otherwise, return 0.
-
+    ALU(data1, num, ALUOp, ALUresult, Zero);
     
+    return 0;
 }
 
 /* Read / Write Memory */
