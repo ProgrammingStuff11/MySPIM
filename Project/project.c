@@ -132,7 +132,15 @@ void read_register(unsigned r1,unsigned r2,unsigned *Reg,unsigned *data1,unsigne
 void sign_extend(unsigned offset,unsigned *extended_value)
 {
     // 1. Assign the sign-extended value of offset to extended_value.
-    *extended_value = ;
+    
+    // check if 16th bit (0x8000 = 1000 0000 0000 0000 in binary) is negative
+    if(offset & 0x8000) {
+        // if negative fill upper 16 bits with 1s (0xFFFF0000 = 1111 1111 1111 1111 0000 0000 0000 0000 in binary)
+        *extended_value = offset | 0xFFFF0000;
+    } else {
+        // if positive fill upper 16 bits with 0s (0x0000FFFF = 0000 0000 0000 0000 1111 1111 1111 1111 in binary)
+        *extended_value = offset & 0x0000FFFF;
+    }
 }
 
 /* ALU operations */
@@ -163,6 +171,23 @@ int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsig
 void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,char RegWrite,char RegDst,char MemtoReg,unsigned *Reg)
 {
     // 1. Write the data (ALUresult or memdata) to a register (Reg) addressed by r2 or r3.
+
+    // R type rd if 1 and I type rt if 0
+    unsigned dest;
+    if(RegDst == 1) {
+       dest = r3;
+    } else {
+       dest = r2;
+    }
+
+    // memory
+    if(RegWrite == 1 && MemtoReg == 1) {
+        Reg[dest] = memdata;
+    } 
+    // ALUresult
+    else if(RegWrite == 1 && MemtoReg == 0) {
+        Reg[dest] = ALUresult;
+    }
 }
 
 /* PC update */
