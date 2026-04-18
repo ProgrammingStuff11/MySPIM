@@ -26,3 +26,43 @@
   $ gcc -o spimcore spimcore.c project.c
   $ ./spimcore <filename>.asc
   ``` 
+**Output based on each command**
+```
+r: “Register” - Display register contents
+```
+![alt text](image.png)
+
+```
+m: “Memory” - Display memory contents
+```
+![alt text](image-1.png)
+
+```
+s: “Step” – Attempt to run the instruction located at the current PC
+```
+![alt text](image-3.png)
+
+```
+c: “Continue” – Attempt to run all instructions, beginning with PC
+```
+![alt text](image-4.png)
+
+```
+h: “Halt” – Check to see if the simulation has halted
+```
+![alt text](image-5.png)
+
+```
+p: “Print” – Prints a copy of the input file
+```
+![alt text](image-6.png)
+
+```
+g: “Controls” – Display the most recent control signals
+```
+![alt text](image-7.png)
+
+```
+x: “Quit” – terminate the simulation
+```
+![alt text](image-2.png)
