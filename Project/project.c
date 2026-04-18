@@ -115,6 +115,106 @@ int instruction_decode(unsigned op,struct_controls *controls)
     // The following table shows the meaning of the values of ALUOp.
     // 3. Return 1 if a halt condition occurs; otherwise, return 0.
 
+    // r-type
+    if(op == 0x00) {
+        controls->ALUOp = '7';
+        controls->ALUSrc = '0';
+        controls->Branch = '0';
+        controls->Jump = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->MemWrite = '0';
+        controls->RegDst = '1';
+        controls->RegWrite = '1';
+    }
+    // addi
+    else if(op == 0x08) {
+        controls->ALUOp = '0';
+        controls->ALUSrc = '1';
+        controls->Branch = '0';
+        controls->Jump = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->MemWrite = '0';
+        controls->RegDst = '0';
+        controls->RegWrite = '1';
+    }
+    // sw
+    else if(op == 0x2B) {
+        controls->ALUOp = '0';
+        controls->ALUSrc = '1';
+        controls->Branch = '0';
+        controls->Jump = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '2';
+        controls->MemWrite = '1';
+        controls->RegDst = '2';
+        controls->RegWrite = '0';
+    }
+    // lw
+    else if(op == 0x23) {
+        controls->ALUOp = '0';
+        controls->ALUSrc = '1';
+        controls->Branch = '0';
+        controls->Jump = '0';
+        controls->MemRead = '1';
+        controls->MemtoReg = '1';
+        controls->MemWrite = '0';
+        controls->RegDst = '0';
+        controls->RegWrite = '1';
+    }
+    // lui
+    else if(op == 0x0F) {
+        controls->ALUOp = '6';
+        controls->ALUSrc = '1';
+        controls->Branch = '0';
+        controls->Jump = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->MemWrite = '0';
+        controls->RegDst = '0';
+        controls->RegWrite = '1';
+    }
+    // slti
+    else if(op == 0x0A) {
+        controls->ALUOp = '2';
+        controls->ALUSrc = '1';
+        controls->Branch = '0';
+        controls->Jump = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->MemWrite = '0';
+        controls->RegDst = '0';
+        controls->RegWrite = '1';
+    }
+    // beq
+    else if(op == 0x04) {
+        controls->ALUOp = '1';
+        controls->ALUSrc = '0';
+        controls->Branch = '1';
+        controls->Jump = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '2';
+        controls->MemWrite = '0';
+        controls->RegDst = '2';
+        controls->RegWrite = '0';
+    }
+    // j
+    else if(op == 0x02) {
+        controls->ALUOp = '0';
+        controls->ALUSrc = '0';
+        controls->Branch = '0';
+        controls->Jump = '1';
+        controls->MemRead = '0';
+        controls->MemtoReg = '2';
+        controls->MemWrite = '0';
+        controls->RegDst = '2';
+        controls->RegWrite = '0';
+    } else {
+        return 1;
+    }
+
+    return 0;
 }
 
 /* Read Register */
@@ -146,12 +246,63 @@ void sign_extend(unsigned offset,unsigned *extended_value)
 /* ALU operations */
 /* 10 Points */
 int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
-{
+{  
+    // 5. Return 1 if a halt condition occurs; otherwise, return 0.
+    if(ALUOp > 7) {
+        return 1;
+    }
+
     // 1. Apply ALU operations on data1, and data2 or extended_value (determined by ALUSrc).
+    unsigned num;
+    // use sign extended value if ALUSrc is 1
+    if(ALUSrc == 1) {
+        num = extended_value;
+    } 
+    // else use data2 if ALUSrc is 0
+    else {
+        num = data2;
+    }
     // 2. The operation performed is based on ALUOp and funct.
+    if(ALUOp == 7) {
+        // add
+        if(funct == 0x20) {
+            ALUOp = 0;
+        } 
+        // sub
+        else if(funct == 0x22) {
+            ALUOp = 1;
+        }
+        // slt
+        else if(funct == 0x2A) {
+            ALUOp = 2;
+        }
+        // sltu
+        else if(funct == 0x2B) {
+            ALUOp = 3;
+        }
+        // and
+        else if(funct == 0x24) {
+            ALUOp = 4;
+        }
+        // or
+        else if(funct == 0x25) {
+            ALUOp = 5;
+        }
+        // sll
+        else if(funct == 0x00) {
+            ALUOp = 6;
+        }
+        // nor
+        else if(funct == 0x27) {
+            ALUOp = 7;
+        }
+    }
+
     // 3. Apply the function ALU(...).
     // 4. Output the result to ALUresult.
-    // 5. Return 1 if a halt condition occurs; otherwise, return 0.
+    ALU(data1, num, ALUOp, ALUresult, Zero);
+    
+    return 0;
 }
 
 /* Read / Write Memory */
