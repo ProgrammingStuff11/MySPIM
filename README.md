@@ -21,8 +21,8 @@
 
 **Run Code**
   ```
-  Open the terminal and run the following lines:
+  Open the terminal and run the following lines in bash:
   
-  $ gcc -o spimcore spimcore.c project.c (bash)
-  $ ./spimcore <filename>.asc (bash)
+  $ gcc -o spimcore spimcore.c project.c
+  $ ./spimcore <filename>.asc
   ``` 
