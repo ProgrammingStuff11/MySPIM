@@ -53,7 +53,7 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
     }
 
     // 3. Assign Zero to 1 if the result is zero; otherwise, assign 0.
-    if(ALUresult == 0) {
+    if(*ALUresult == 0) {
         *Zero = 1;
     } else {
         *Zero = 0;
@@ -117,99 +117,99 @@ int instruction_decode(unsigned op,struct_controls *controls)
 
     // r-type
     if(op == 0x00) {
-        controls->ALUOp = '7';
-        controls->ALUSrc = '0';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '1';
-        controls->RegWrite = '1';
+        controls->ALUOp = 7;
+        controls->ALUSrc = 0;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 1;
+        controls->RegWrite = 1;
     }
     // addi
     else if(op == 0x08) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // sw
     else if(op == 0x2B) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '2';
-        controls->MemWrite = '1';
-        controls->RegDst = '2';
-        controls->RegWrite = '0';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 2;
+        controls->MemWrite = 1;
+        controls->RegDst = 2;
+        controls->RegWrite = 0;
     }
     // lw
     else if(op == 0x23) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '1';
-        controls->MemtoReg = '1';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 1;
+        controls->MemtoReg = 1;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // lui
     else if(op == 0x0F) {
-        controls->ALUOp = '6';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 6;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // slti
     else if(op == 0x0A) {
-        controls->ALUOp = '2';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 2;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // beq
     else if(op == 0x04) {
-        controls->ALUOp = '1';
-        controls->ALUSrc = '0';
-        controls->Branch = '1';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '2';
-        controls->MemWrite = '0';
-        controls->RegDst = '2';
-        controls->RegWrite = '0';
+        controls->ALUOp = 1;
+        controls->ALUSrc = 0;
+        controls->Branch = 1;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 2;
+        controls->MemWrite = 0;
+        controls->RegDst = 2;
+        controls->RegWrite = 0;
     }
     // j
     else if(op == 0x02) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '0';
-        controls->Branch = '0';
-        controls->Jump = '1';
-        controls->MemRead = '0';
-        controls->MemtoReg = '2';
-        controls->MemWrite = '0';
-        controls->RegDst = '2';
-        controls->RegWrite = '0';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 0;
+        controls->Branch = 0;
+        controls->Jump = 1;
+        controls->MemRead = 0;
+        controls->MemtoReg = 2;
+        controls->MemWrite = 0;
+        controls->RegDst = 2;
+        controls->RegWrite = 0;
     } else {
         return 1;
     }
@@ -307,13 +307,42 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
 
 /* Read / Write Memory */
 /* 10 Points */
-int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
+int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem)
 {
+    // 4. Return 1 if a halt condition occurs; otherwise, return 0.
+    // Have to check halt conditions first to avoid segmentation fault
+    /*
+        Halt causes: 
+        - An illegal instruction is encountered.
+        - Jumping to an address that is not word-aligned (being multiple of 4).
+        - The address of lw or sw is not word-aligned.
+        - Accessing data or jumping to an address that is beyond the memory.
+    */
+    if (MemRead == 1 || MemWrite == 1) 
+    {
+        if (ALUresult % 4 != 0 || ALUresult > 0xFFFF) // check to see if out of 64kB memory range
+        {
+            return 1;
+        }
+    }
+    
     // 1. Use the value of MemWrite or MemRead to determine if a memory write
     // operation or memory read operation or neither is occurring.
+
     // 2. If reading from memory, read the content of the memory location addressed by ALUresult to memdata.
+    if (MemRead == 1) 
+    {
+        // MEM bit shift to convert byte address to word index
+        *memdata = Mem[ALUresult >> 2];
+    }
+
     // 3. If writing to memory, write the value of data2 to the memory location addressed by ALUresult.
-    // 4. Return 1 if a halt condition occurs; otherwise, return 0.
+    if (MemWrite == 1) 
+    {
+        Mem[ALUresult >> 2] = data2;
+    }
+
+    return 0;
 }
 
 
@@ -343,8 +372,26 @@ void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,
 
 /* PC update */
 /* 10 Points */
-void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char Zero,unsigned *PC)
+void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
 {
     // 1. Update the program counter (PC).
+    // if you cannot branch or jump, update regularly
+    unsigned pc_Counter = *PC + 4;
+
+    // 1 means enabled
+    // 0 means disabled
+    if (Branch == 1 && Zero == 1) // Is this a branch instruction AND did ALU give us the green light?
+    {
+        // Shift left by 2, convert word offset to byte offset 
+        pc_Counter += (extended_value << 2);
+    }
+    if (Jump == 1) // Is this a jump instruction 
+    {
+        // jsec is 26-bit 
+        // Shift left by 2, get 28 bits
+        pc_Counter = (pc_Counter & 0xF0000000) | (jsec << 2);
+    }
+
+    *PC = pc_Counter;
 }
 
