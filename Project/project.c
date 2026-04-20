@@ -53,7 +53,7 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
     }
 
     // 3. Assign Zero to 1 if the result is zero; otherwise, assign 0.
-    if(ALUresult == 0) {
+    if(*ALUresult == 0) {
         *Zero = 1;
     } else {
         *Zero = 0;
@@ -117,99 +117,99 @@ int instruction_decode(unsigned op,struct_controls *controls)
 
     // r-type
     if(op == 0x00) {
-        controls->ALUOp = '7';
-        controls->ALUSrc = '0';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '1';
-        controls->RegWrite = '1';
+        controls->ALUOp = 7;
+        controls->ALUSrc = 0;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 1;
+        controls->RegWrite = 1;
     }
     // addi
     else if(op == 0x08) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // sw
     else if(op == 0x2B) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '2';
-        controls->MemWrite = '1';
-        controls->RegDst = '2';
-        controls->RegWrite = '0';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 2;
+        controls->MemWrite = 1;
+        controls->RegDst = 2;
+        controls->RegWrite = 0;
     }
     // lw
     else if(op == 0x23) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '1';
-        controls->MemtoReg = '1';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 1;
+        controls->MemtoReg = 1;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // lui
     else if(op == 0x0F) {
-        controls->ALUOp = '6';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 6;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // slti
     else if(op == 0x0A) {
-        controls->ALUOp = '2';
-        controls->ALUSrc = '1';
-        controls->Branch = '0';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '0';
-        controls->MemWrite = '0';
-        controls->RegDst = '0';
-        controls->RegWrite = '1';
+        controls->ALUOp = 2;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
     }
     // beq
     else if(op == 0x04) {
-        controls->ALUOp = '1';
-        controls->ALUSrc = '0';
-        controls->Branch = '1';
-        controls->Jump = '0';
-        controls->MemRead = '0';
-        controls->MemtoReg = '2';
-        controls->MemWrite = '0';
-        controls->RegDst = '2';
-        controls->RegWrite = '0';
+        controls->ALUOp = 1;
+        controls->ALUSrc = 0;
+        controls->Branch = 1;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 2;
+        controls->MemWrite = 0;
+        controls->RegDst = 2;
+        controls->RegWrite = 0;
     }
     // j
     else if(op == 0x02) {
-        controls->ALUOp = '0';
-        controls->ALUSrc = '0';
-        controls->Branch = '0';
-        controls->Jump = '1';
-        controls->MemRead = '0';
-        controls->MemtoReg = '2';
-        controls->MemWrite = '0';
-        controls->RegDst = '2';
-        controls->RegWrite = '0';
+        controls->ALUOp = 0;
+        controls->ALUSrc = 0;
+        controls->Branch = 0;
+        controls->Jump = 1;
+        controls->MemRead = 0;
+        controls->MemtoReg = 2;
+        controls->MemWrite = 0;
+        controls->RegDst = 2;
+        controls->RegWrite = 0;
     } else {
         return 1;
     }
