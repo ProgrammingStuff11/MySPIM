@@ -187,6 +187,18 @@ int instruction_decode(unsigned op,struct_controls *controls)
         controls->RegDst = 0;
         controls->RegWrite = 1;
     }
+    // sltiu
+    else if(op == 0x0B) {
+        controls->ALUOp = 3;
+        controls->ALUSrc = 1;
+        controls->Branch = 0;
+        controls->Jump = 0;
+        controls->MemRead = 0;
+        controls->MemtoReg = 0;
+        controls->MemWrite = 0;
+        controls->RegDst = 0;
+        controls->RegWrite = 1;
+    }
     // beq
     else if(op == 0x04) {
         controls->ALUOp = 1;
